@@ -5,6 +5,8 @@ Config.JailBlip = vector3(1854.0, 2622.0, 45.0)
 Config.JailLocation = vector3(-1157.5, -2997.9, 45.5)
 Config.JailTimeSyncInterval = 60000 * 5
 
+Config.ReleaseLocation = vector3(1850.0, 2600.0, 45.0) -- Example coordinates for release location
+
 
 Config.Uniforms = {
 	prison_wear = {

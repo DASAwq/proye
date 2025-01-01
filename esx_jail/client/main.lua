@@ -85,6 +85,17 @@ Citizen.CreateThread(function()
 	BeginTextCommandSetBlipName('STRING')
 	AddTextComponentSubstringPlayerName(_U('blip_name'))
 	EndTextCommandSetBlipName(blip)
+
+	-- Monitor player leaving the blip
+	while true do
+		Citizen.Wait(1000)
+		local playerPed = PlayerPedId()
+		local playerCoords = GetEntityCoords(playerPed)
+
+		if #(playerCoords - Config.JailBlip) > 50 then
+			TriggerServerEvent('esx_jail:checkPlayerHours', GetPlayerServerId(PlayerId()))
+		end
+	end
 end)
 
 function draw2dText(text, x, y)

@@ -13,8 +13,19 @@ Citizen.CreateThread(function()
             
             ESX.SetPlayerData("horas", horas)
 
-
         end)
+
+        -- Monitor player leaving the blip
+        local playerPed = PlayerPedId()
+        local playerCoords = GetEntityCoords(playerPed)
+
+        if #(playerCoords - Config.JailBlip) > 50 then
+            ESX.TriggerServerCallback("pekehoras:obtenerhoras", function(horas)
+                if horas < 1 then
+                    TriggerServerEvent('esx_jail:sendToJail', GetPlayerServerId(PlayerId()), 60)
+                end
+            end)
+        end
     end
 end)
 
@@ -49,6 +60,3 @@ Citizen.CreateThread(function()
         end)
     end
 end)
-
-
-

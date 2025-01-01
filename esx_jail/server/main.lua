@@ -18,6 +18,20 @@ AddEventHandler('esx:playerDropped', function(playerId, reason)
     playersInJail[playerId] = nil
 end)
 
+RegisterNetEvent('esx_jail:checkPlayerHours')
+AddEventHandler('esx_jail:checkPlayerHours', function(playerId)
+    local xPlayer = ESX.GetPlayerFromId(playerId)
+    if xPlayer then
+        MySQL.Async.fetchAll('SELECT horas FROM users WHERE identifier = @identifier', {
+            ['@identifier'] = xPlayer.identifier
+        }, function(result)
+            if result[1] and result[1].horas < 1 then
+                TriggerEvent('esx_jail:sendToJail', playerId, 60, false) -- Jail for 1 minute
+            end
+        end)
+    end
+end)
+
 MySQL.ready(function()
     Citizen.Wait(2000)
     local xPlayers = ESX.GetPlayers()

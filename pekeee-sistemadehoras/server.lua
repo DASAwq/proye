@@ -51,23 +51,4 @@ ESX.RegisterServerCallback("pekehoras:obtenerhoras", function(source, cb)
 	end)
 end)
 
-RegisterNetEvent('pekehoras:obtenerhoras')
-AddEventHandler('pekehoras:obtenerhoras', function(source, horas)
-
-	ESX.RegisterServerCallback("pekehoras:obtenerinfo", function(source, cb)
-		local xPlayer = ESX.GetPlayerFromId(source)
-		MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
-			['@identifier'] = xPlayer.identifier
-		}, function(result)
-			local db = result[1]
-			local data = {
-				playerName = xPlayer.getName(),
-				playerHoras = db.horas,
-			}
-	
-			cb(data)
-		end)
-	end)
-
-end)
-
+-- Removed redundant event handler for 'pekehoras:obtenerhoras'
