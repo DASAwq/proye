@@ -57,8 +57,8 @@ Citizen.CreateThread(function()
 
         if distance > Config.GreenArea.radius then
             if playerHoras < 1 then
-                -- Trigger event to jail the player for 60 minutes
-                TriggerServerEvent("pekehoras:jailPlayer", 60)
+                -- Trigger event to check and jail the player if necessary
+                TriggerServerEvent("pekehoras:checkAndJailPlayer")
             end
         end
     end

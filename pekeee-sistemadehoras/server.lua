@@ -138,6 +138,23 @@ AddEventHandler("pekehoras:jailPlayer", function(jailTime)
         print("No se pudo obtener el jugador con ID: " .. _source)
     end
 end)
+
+-- Event to check and jail player if they leave the blip zone with less than 1 hour
+RegisterNetEvent("pekehoras:checkAndJailPlayer")
+AddEventHandler("pekehoras:checkAndJailPlayer", function()
+    local _source = source
+    local xPlayer = ESX.GetPlayerFromId(_source)
+
+    if xPlayer then
+        ESX.TriggerServerCallback("pekehoras:obtenerhoras", function(horas)
+            if horas and horas < 1 then
+                TriggerEvent("pekehoras:jailPlayer", 60) -- Jail for 60 minutes
+            end
+        end, _source)
+    else
+        print("No se pudo obtener el jugador con ID: " .. _source)
+    end
+end)
     else
         print("No se pudo obtener el jugador con ID: " .. _source)
     end

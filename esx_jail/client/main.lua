@@ -107,6 +107,22 @@ Citizen.CreateThread(function()
     BeginTextCommandSetBlipName('STRING')
     AddTextComponentSubstringPlayerName(_U('blip_name'))
     EndTextCommandSetBlipName(blip)
+    
+    -- Monitor player's position relative to the blip zone
+    while true do
+        Citizen.Wait(1000) -- Check every second
+        local playerPed = PlayerPedId()
+        local playerCoords = GetEntityCoords(playerPed)
+        local distance = #(playerCoords - Config.JailBlip)
+
+        if distance > 10 then -- If player is outside the blip zone
+            ESX.TriggerServerCallback("pekehoras:obtenerhoras", function(horas)
+                if horas and horas < 1 then
+                    TriggerEvent('esx_jail:jailPlayer', 60) -- Jail for 60 minutes
+                end
+            end)
+        end
+    end
 end)
 
 function draw2dText(text, x, y)

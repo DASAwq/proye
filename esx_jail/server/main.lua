@@ -54,8 +54,8 @@ AddEventHandler('esx_jail:sendToJail', function(playerId, jailTime, quiet)
     local xPlayer = ESX.GetPlayerFromId(playerId)
 
     if xPlayer then
-        exports.oxmysql:execute('SELECT horas FROM users WHERE identifier = ?', { xPlayer.identifier }, function(result)
-            if result[1] and result[1].horas < 5 then
+        ESX.TriggerServerCallback("pekehoras:obtenerhoras", function(horas)
+            if horas and horas < 1 then
                 if not playersInJail[playerId] then
                     MySQL.Async.execute('UPDATE users SET jail_time = @jail_time WHERE identifier = @identifier', {
                         ['@identifier'] = xPlayer.identifier,
@@ -73,7 +73,7 @@ AddEventHandler('esx_jail:sendToJail', function(playerId, jailTime, quiet)
             else
                 print('Player ' .. xPlayer.getName() .. ' (ID: ' .. playerId .. ') has sufficient hours and will not be jailed.')
             end
-        end)
+        end, xPlayer.source)
     end
 end)
 
