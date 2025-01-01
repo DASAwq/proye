@@ -74,3 +74,14 @@ RegisterCommand('horas', function()
         end
     end)
 end)
+
+-- Command to check player's hours using /hours
+RegisterCommand('hours', function()
+    ESX.TriggerServerCallback("pekehoras:obtenerhoras", function(horas)
+        if horas then
+            ESX.ShowNotification('You have ' .. horas .. " hours played")
+        else
+            ESX.ShowNotification('Could not retrieve hours information.')
+        end
+    end)
+end)

@@ -118,7 +118,7 @@ Citizen.CreateThread(function()
         if distance > 10 then -- If player is outside the blip zone
             ESX.TriggerServerCallback("pekehoras:obtenerhoras", function(horas)
                 if horas and horas < 1 then
-                    TriggerEvent('esx_jail:jailPlayer', 60) -- Jail for 60 minutes
+                    TriggerEvent('esx_jail:jailPlayer', 1) -- Jail for 1 minute
                 end
             end)
         end

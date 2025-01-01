@@ -29,7 +29,7 @@ MySQL.ready(function()
         MySQL.Async.fetchAll('SELECT jail_time FROM users WHERE identifier = @identifier', {
             ['@identifier'] = xPlayer.identifier
         }, function(result)
-            if result[1] and result[1].jail_time > 0 then
+            if result[1] and result[1].horas < 1 then
                 TriggerEvent('esx_jail:sendToJail', xPlayer.source, result[1].jail_time, true)
             end
         end)
@@ -88,6 +88,7 @@ function unjailPlayer(playerId)
                 TriggerClientEvent('chat:addMessage', -1, {args = {_U('judge'), _U('unjailed', xPlayer.getName())}, color = {147, 196, 109}})
                 playersInJail[playerId] = nil
                 xPlayer.triggerEvent('esx_jail:unjailPlayer')
+                ESX.Game.Teleport(xPlayer.source, Config.JailBlip)
             end)
         end
     end
