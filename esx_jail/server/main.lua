@@ -54,26 +54,20 @@ AddEventHandler('esx_jail:sendToJail', function(playerId, jailTime, quiet)
     local xPlayer = ESX.GetPlayerFromId(playerId)
 
     if xPlayer then
-        exports.oxmysql:execute('SELECT horas FROM users WHERE identifier = ?', { xPlayer.identifier }, function(result)
-            if result[1] and result[1].horas < 5 then
-                if not playersInJail[playerId] then
-                    MySQL.Async.execute('UPDATE users SET jail_time = @jail_time WHERE identifier = @identifier', {
-                        ['@identifier'] = xPlayer.identifier,
-                        ['@jail_time'] = jailTime
-                    }, function(rowsChanged)
-                        xPlayer.triggerEvent('esx_policejob:unrestrain')
-                        xPlayer.triggerEvent('esx_jail:jailPlayer', jailTime)
-                        playersInJail[playerId] = {timeRemaining = jailTime, identifier = xPlayer.getIdentifier()}
+        if not playersInJail[playerId] then
+            MySQL.Async.execute('UPDATE users SET jail_time = @jail_time WHERE identifier = @identifier', {
+                ['@identifier'] = xPlayer.identifier,
+                ['@jail_time'] = jailTime
+            }, function(rowsChanged)
+                xPlayer.triggerEvent('esx_policejob:unrestrain')
+                xPlayer.triggerEvent('esx_jail:jailPlayer', jailTime)
+                playersInJail[playerId] = {timeRemaining = jailTime, identifier = xPlayer.getIdentifier()}
 
-                        if not quiet then
-                            TriggerClientEvent('chat:addMessage', -1, {args = {_U('judge'), _U('jailed_msg', xPlayer.getName(), ESX.Math.Round(jailTime / 60))}, color = {147, 196, 109}})
-                        end
-                    end)
+                if not quiet then
+                    TriggerClientEvent('chat:addMessage', -1, {args = {_U('judge'), _U('jailed_msg', xPlayer.getName(), ESX.Math.Round(jailTime / 60))}, color = {147, 196, 109}})
                 end
-            else
-                print('Player ' .. xPlayer.getName() .. ' (ID: ' .. playerId .. ') has sufficient hours and will not be jailed.')
-            end
-        end)
+            end)
+        end
     end
 end)
 
@@ -98,9 +92,9 @@ Citizen.CreateThread(function()
         Citizen.Wait(1000)
 
         for playerId, data in pairs(playersInJail) do
-            data.timeRemaining = data.timeRemaining - 1
+            playersInJail[playerId].timeRemaining = data.timeRemaining - 1
 
-            if data.timeRemaining <= 0 then
+            if data.timeRemaining < 1 then
                 unjailPlayer(playerId)
             end
         end

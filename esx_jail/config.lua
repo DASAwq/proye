@@ -1,8 +1,8 @@
 Config = {}
 Config.Locale = 'en'
 
-Config.JailBlip = vector3(417.94,-991.38, 29.34)
-Config.JailLocation = vector3(417.94,-991.38, 29.34)
+Config.JailBlip = vector3(1854.0, 2622.0, 45.0)
+Config.JailLocation = vector3(-1157.5, -2997.9, 45.5)
 Config.JailTimeSyncInterval = 60000 * 5
 
 
